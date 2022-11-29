@@ -46,13 +46,14 @@ def main(_):
 
   scores = None
   for d in summary_dirs:
+    if d.endswith(".jsonl"): continue
     events = eval_utils.parse_events_files(d, FLAGS.seqio_summaries)
     if FLAGS.perplexity_eval:
       task_metrics = events
     else:
       task_metrics = eval_utils.get_eval_metric_values(
           events,
-          task_name=os.path.basename(d) if FLAGS.seqio_summaries else None)
+          task_name=os.path.basename(d.rstrip("/")) if FLAGS.seqio_summaries else None)
     if scores:
       scores.update(task_metrics)
     else:
